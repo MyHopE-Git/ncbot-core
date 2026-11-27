@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NCBot Control</title>
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">NCBot Edge Controller</div>
+    <div class="global-actions">
+      <span id="globalStatusBadge" class="badge">Stopped</span>
+      <select id="globalScriptSelect" title="เลือกสคริปต์หลัก"></select>
+      <button id="btnGlobalStart" class="btn-start">Start All</button>
+      <button id="btnGlobalStop" class="btn-stop">Stop All</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="1">1. Port Manager</button>
+    <button class="tab-btn" data-tab="2">2. Script Studio</button>
+    <button class="tab-btn" data-tab="3">3. Module 3</button>
+    <button class="tab-btn" data-tab="4">4. Module 4</button>
+    <button class="tab-btn" data-tab="5">5. Module 5</button>
+  </nav>
+
+  <main class="content">
+    <div id="page-1" class="page-view">
+      <div class="toolbar">
+        <div class="add-group">
+          <input id="newName" type="text" placeholder="ชื่อบอท (ว่าง = Default)" />
+          <input id="newHost" type="text" value="127.0.0.1" placeholder="Host/IP" style="width: 125px;" />
+          <input id="newPort" type="number" placeholder="Port" style="width: 90px;" />
+          <button id="btnAddPort" class="btn-add">+ Add Port</button>
+        </div>
+        <div class="bulk-group">
+          <label style="font-size: 12px; color: #9fb0c2; display: flex; align-items: center; gap: 4px;">
+            <input id="chkOnlyEnabled" type="checkbox" checked /> เช็กเฉพาะที่เปิดใช้งาน
+          </label>
+          <button id="btnCheckAll" class="btn-check">ตรวจเช็ครวมทุก Port</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 55px;">ลำดับ</th>
+              <th>ใช้งาน</th>
+              <th>ชื่อ</th>
+              <th>Port (Host:Port)</th>
+              <th>สถานะ / Ping / ล่าสุด</th>
+              <th>เช็กพอร์ต</th>
+              <th>พักงาน</th>
+              <th>ลำดับ</th>
+              <th>ลบ</th>
+            </tr>
+          </thead>
+          <tbody id="portTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="page-2" class="page-view" style="display:none;">
+      <div class="placeholder-box">แท็บที่ 2 — Script Studio (พร้อมเสียบโมดูล)</div>
+    </div>
+    <div id="page-3" class="page-view" style="display:none;">
+      <div class="placeholder-box">แท็บที่ 3 — พื้นที่สำหรับต่อยอดระบบที่ 3 ในอนาคต</div>
+    </div>
+    <div id="page-4" class="page-view" style="display:none;">
+      <div class="placeholder-box">แท็บที่ 4 — พื้นที่สำหรับต่อยอดระบบที่ 4 ในอนาคต</div>
+    </div>
+    <div id="page-5" class="page-view" style="display:none;">
+      <div class="placeholder-box">แท็บที่ 5 — พื้นที่สำหรับต่อยอดระบบที่ 5 ในอนาคต</div>
+    </div>
+  </main>
+
+  <section class="log-section">
+    <div class="log-header">
+      <span>Log การทำงาน</span>
+      <button id="btnClearLog" style="height: 26px; font-size: 12px;">Clear Log</button>
+    </div>
+    <div id="logBox"></div>
+  </section>
+
+  <script src="/js/core.js"></script>
+  <script src="/js/tab1-ports.js"></script>
+</body>
+</html>

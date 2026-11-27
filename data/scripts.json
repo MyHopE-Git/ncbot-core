@@ -1,0 +1,10 @@
+{
+  "sample_flow": [
+    "ping",
+    "log เริ่มต้นรอบการทำงาน",
+    "wait 1",
+    "send {\"cmd\":\"status\"}",
+    "wait 2",
+    "log จบรอบการทำงาน"
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "t-1795751165760",
+    "name": "Bot-Port-9101",
+    "host": "127.0.0.1",
+    "port": 9101,
+    "enabled": true
+  },
+  {
+    "id": "t-1795752746834",
+    "name": "Bot-Port-9102",
+    "host": "127.0.0.1",
+    "port": 9102,
+    "enabled": false
+  }
+]

@@ -1,0 +1,171 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Tahoma, Arial, sans-serif;
+  background: #12161b;
+  color: #e6edf3;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* แถบบนสุด: อยู่ทุกหน้า */
+.topbar {
+  background: #1a2028;
+  border-bottom: 1px solid #2e3846;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.brand { font-weight: bold; font-size: 15px; }
+.global-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.badge {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  background: #26303d;
+  color: #9fb0c2;
+  display: inline-block;
+}
+.badge.active { background: #184e34; color: #7ee787; }
+.badge.paused { background: #173e66; color: #79c0ff; border: 1px solid #2f6fa8; }
+
+/* แถบแท็บเปลี่ยนหน้า 1 2 3 4 5 */
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: #161b22;
+  border-bottom: 1px solid #2e3846;
+}
+.tab-btn {
+  border: none;
+  border-right: 1px solid #2e3846;
+  background: transparent;
+  color: #9fb0c2;
+  padding: 10px 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+}
+.tab-btn:last-child { border-right: none; }
+.tab-btn.active {
+  background: #232c38;
+  color: #ffffff;
+  box-shadow: inset 0 -2px 0 #4ea1ff;
+}
+
+/* พื้นที่เนื้อหาตรงกลาง */
+.content {
+  flex: 1;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.toolbar {
+  background: #1a2028;
+  border: 1px solid #2e3846;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.add-group, .bulk-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+input[type="text"], input[type="number"], select, button {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid #394556;
+  background: #0f1318;
+  color: #e6edf3;
+  font-size: 12.5px;
+}
+button { cursor: pointer; font-weight: bold; }
+button:hover:not(:disabled) { filter: brightness(1.12); }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-start { background: #1b6e43; border-color: #258d58; }
+.btn-stop { background: #8f292b; border-color: #b8373a; }
+.btn-check { background: #224b78; border-color: #3268a3; }
+.btn-add { background: #285c45; border-color: #367a5c; }
+.btn-del { background: #5c2224; border-color: #823134; }
+.btn-move { background: #242d38; border-color: #3a4757; padding: 0 8px; }
+.btn-pause-mode { background: #1d4ed8; border-color: #3b82f6; color: #dbeafe; }
+.btn-open-mode { background: #1b6e43; border-color: #258d58; color: #dcfce7; }
+
+/* ตารางจัดการ Port */
+.table-wrap {
+  background: #1a2028;
+  border: 1px solid #2e3846;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+th, td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #27303c;
+  text-align: left;
+  white-space: nowrap;
+}
+th { background: #151a21; color: #9fb0c2; font-size: 12px; }
+tr.row-paused { background: rgba(29, 78, 216, 0.08); }
+
+.status-ok { color: #7ee787; font-weight: bold; }
+.status-err { color: #ff7b72; font-weight: bold; }
+.status-idle { color: #9fb0c2; }
+.sub-meta { display: block; font-size: 11px; color: #8b9bb0; font-weight: normal; margin-top: 2px; }
+
+.placeholder-box {
+  background: #1a2028;
+  border: 1px dashed #394556;
+  border-radius: 8px;
+  padding: 28px;
+  text-align: center;
+  color: #9fb0c2;
+}
+
+/* แถบล่างสุด: Log การทำงาน */
+.log-section {
+  background: #161b22;
+  border-top: 1px solid #2e3846;
+  padding: 10px 16px 14px;
+}
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #9fb0c2;
+}
+#logBox {
+  height: 190px;
+  overflow-y: auto;
+  background: #0b0e12;
+  border: 1px solid #28313d;
+  border-radius: 6px;
+  padding: 10px;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.log-info { color: #9ecbff; }
+.log-success { color: #7ee787; }
+.log-warn { color: #f2cc60; }
+.log-error { color: #ff7b72; }
