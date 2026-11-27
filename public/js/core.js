@@ -210,17 +210,21 @@ window.NCBotCore = (() => {
       const ws = new WebSocket(`${wsProtocol}//${location.host}`);
 
       ws.addEventListener('message', (event) => {
-        try {
-          const msg = JSON.parse(event.data);
-          if (msg.type === 'log') appendLog(msg.data);
-          if (msg.type === 'status') {
-            state.runningKeys = Array.isArray(msg.running) ? msg.running : [];
-            notifyStateChanged();
-          }
-        } catch {
-          // ignore malformed frame
-        }
-      });
+  try {
+    const msg = JSON.parse(event.data);
+    if (msg.type === 'log') appendLog(msg.data);
+    if (msg.type === 'status') {
+      state.runningKeys = Array.isArray(msg.running) ? msg.running : [];
+      notifyStateChanged();
+    }
+    if (msg.type === 'targets') {
+      state.targets = Array.isArray(msg.targets) ? msg.targets : [];
+      notifyStateChanged();
+    }
+  } catch {
+    // ignore malformed frame
+  }
+});
 
       ws.addEventListener('open', () => syncFromServer());
     } catch (err) {

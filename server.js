@@ -48,7 +48,10 @@ const runner = createScriptRunner({
 });
 
 // โมดูล Tab 1: Port Manager & Global Control
-app.use('/api', createPortsRouter({ runner }));
+app.use('/api', createPortsRouter({
+  runner,
+  onTargetsChange: (targets) => broadcast({ type: 'targets', targets })
+}));
 
 wss.on('connection', (ws) => {
   ws.send(JSON.stringify({ type: 'status', running: runner.getRunningKeys() }));

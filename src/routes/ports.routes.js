@@ -8,8 +8,14 @@ const {
   normalizeHost
 } = require('../utils/storage');
 
-function createPortsRouter({ runner }) {
+function createPortsRouter({ runner, onTargetsChange }) {
   const router = express.Router();
+
+  function notifyTargets(targets) {
+    if (typeof onTargetsChange === 'function') {
+      onTargetsChange(targets);
+    }
+  }
 
   router.get('/state', (req, res) => {
     res.json({
@@ -46,6 +52,7 @@ function createPortsRouter({ runner }) {
 
     targets.push(newTarget);
     writeJsonSafe(TARGETS_FILE, targets);
+    notifyTargets(targets);
     res.status(201).json({ ok: true, target: newTarget, targets });
   });
 
@@ -66,6 +73,7 @@ function createPortsRouter({ runner }) {
       .filter((t) => t.host && Number.isInteger(t.port) && t.port >= 1 && t.port <= 65535);
 
     writeJsonSafe(TARGETS_FILE, normalized);
+    notifyTargets(normalized);
     res.json({ ok: true, targets: normalized });
   });
 

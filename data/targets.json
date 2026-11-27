@@ -12,5 +12,12 @@
     "host": "127.0.0.1",
     "port": 9102,
     "enabled": false
+  },
+  {
+    "id": "t-1795786782292",
+    "name": "Bot-Port-9103",
+    "host": "127.0.0.1",
+    "port": 9103,
+    "enabled": false
   }
 ]
