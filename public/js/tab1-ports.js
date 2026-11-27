@@ -4,6 +4,11 @@
 
   const portTableBody = document.getElementById('portTableBody');
   const portStatuses = new Map(); // "host:port" -> { text, meta, cls }
+  let isMutating = false;
+
+  function cloneTargets(list) {
+    return (Array.isArray(list) ? list : []).map((t) => ({ ...t }));
+  }
 
   function renderTable() {
     if (!portTableBody) return;
@@ -41,18 +46,18 @@
           <span class="sub-meta">${Core.escapeHtml(st.meta)}</span>
         </td>
         <td>
-          <button class="btn-check" data-action="check" data-idx="${index}">ตรวจเช็ก</button>
+          <button class="btn-check" data-action="check" data-idx="${index}" ${isMutating ? 'disabled' : ''}>ตรวจเช็ก</button>
         </td>
         <td>
-          <button class="btn-open-mode" data-action="set-open" data-idx="${index}" ${isActiveMode ? 'disabled' : ''}>เปิด</button>
-          <button class="btn-pause-mode" data-action="set-pause" data-idx="${index}" ${!isActiveMode ? 'disabled' : ''}>พักงาน</button>
+          <button class="btn-open-mode" data-action="set-open" data-idx="${index}" ${isMutating || isActiveMode ? 'disabled' : ''}>เปิด</button>
+          <button class="btn-pause-mode" data-action="set-pause" data-idx="${index}" ${isMutating || !isActiveMode ? 'disabled' : ''}>พักงาน</button>
         </td>
         <td>
-          <button class="btn-move" data-action="up" data-idx="${index}" ${index === 0 ? 'disabled' : ''}>▲</button>
-          <button class="btn-move" data-action="down" data-idx="${index}" ${index === targets.length - 1 ? 'disabled' : ''}>▼</button>
+          <button class="btn-move" data-action="up" data-idx="${index}" ${isMutating || index === 0 ? 'disabled' : ''}>▲</button>
+          <button class="btn-move" data-action="down" data-idx="${index}" ${isMutating || index === targets.length - 1 ? 'disabled' : ''}>▼</button>
         </td>
         <td>
-          <button class="btn-del" data-action="del" data-idx="${index}">ลบ</button>
+          <button class="btn-del" data-action="del" data-idx="${index}" ${isMutating ? 'disabled' : ''}>ลบ</button>
         </td>
       `;
       portTableBody.appendChild(tr);
@@ -60,6 +65,8 @@
   }
 
   async function saveTargets(updatedTargets) {
+    isMutating = true;
+    renderTable();
     try {
       const res = await fetch('/api/targets', {
         method: 'PUT',
@@ -77,11 +84,14 @@
     } catch (err) {
       Core.appendLog({ target: 'PORT-MGR', level: 'error', message: `บันทึกข้อมูลผิดพลาด: ${err.message}` });
       return false;
+    } finally {
+      isMutating = false;
+      renderTable();
     }
   }
 
   async function checkSinglePort(index) {
-    const targets = Core.getTargets();
+    const targets = cloneTargets(Core.getTargets());
     const t = targets[index];
     if (!t) return;
     const key = `${t.host}:${t.port}`;
@@ -125,7 +135,7 @@
   }
 
   async function checkAllPorts() {
-    const targets = Core.getTargets();
+    const targets = cloneTargets(Core.getTargets());
     const chkOnly = document.getElementById('chkOnlyEnabled');
     const onlyEnabled = chkOnly ? chkOnly.checked : true;
     const indices = targets
@@ -149,6 +159,7 @@
     Core.onStateChange(renderTable);
 
     document.getElementById('btnAddPort')?.addEventListener('click', async () => {
+      if (isMutating) return;
       const nameInput = document.getElementById('newName');
       const hostInput = document.getElementById('newHost');
       const portInput = document.getElementById('newPort');
@@ -163,6 +174,8 @@
       }
 
       const defaultName = `Bot-Port-${port}`;
+      isMutating = true;
+      renderTable();
       try {
         const res = await fetch('/api/targets', {
           method: 'POST',
@@ -186,16 +199,20 @@
         });
       } catch (err) {
         Core.appendLog({ target: `${host}:${port}`, level: 'error', message: `เพิ่ม Port ผิดพลาด: ${err.message}` });
+      } finally {
+        isMutating = false;
+        renderTable();
       }
     });
 
     portTableBody?.addEventListener('click', async (e) => {
+      if (isMutating) return;
       const btn = e.target.closest('button[data-action]');
       if (!btn || btn.disabled) return;
 
       const action = btn.dataset.action;
       const idx = Number(btn.dataset.idx);
-      const targets = Core.getTargets();
+      const targets = cloneTargets(Core.getTargets());
       const t = targets[idx];
       if (!t) return;
       const key = `${t.host}:${t.port}`;
