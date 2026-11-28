@@ -63,8 +63,130 @@
     </div>
 
     <div id="page-2" class="page-view" style="display:none;">
-      <div class="placeholder-box">แท็บที่ 2 — Script Studio (พร้อมเสียบโมดูล)</div>
+      <div class="studio-grid">
+        <!-- โซนซ้าย: รายชื่อสคริปต์ + ตัวอย่าง + คลังรูปภาพ -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <section class="studio-panel">
+            <div class="studio-title">
+              <span>รายชื่อสคริปต์</span>
+              <button id="btnNewScript" class="btn-add" style="height:24px; font-size:11px;">+ ใหม่</button>
+            </div>
+            <div class="studio-row">
+              <select id="templateSelect" style="flex:1; height:28px; font-size:11.5px;">
+                <option value="">-- โหลดตัวอย่างสคริปต์ --</option>
+                <option value="basic_loop">ตัวอย่าง: วนรอบเช็ก Port & รอเวลา</option>
+                <option value="click_find">ตัวอย่าง: หาภาพแล้วคลิกพิกัด</option>
+                <option value="send_cmd">ตัวอย่าง: ส่งคำสั่ง Status แบบมีจังหวะ</option>
+              </select>
+              <button id="btnLoadTemplate" class="btn-chip">ใช้</button>
+            </div>
+            <div id="scriptListBox" class="script-list"></div>
+          </section>
+
+          <section class="studio-panel">
+            <div class="studio-title">
+              <span>คลังรูปภาพ (.png)</span>
+              <button id="btnRefreshGallery" class="btn-chip">รีเฟรช</button>
+            </div>
+            <div style="font-size:11px; color:#8b9bb0;">คลิกที่รูปหรือชื่อเพื่อส่งชื่อไฟล์เข้าสคริปต์</div>
+            <div id="galleryBox" class="gallery-grid"></div>
+          </section>
+        </div>
+
+        <!-- โซนกลาง: เลือก Port + โค้ดลัด + เขียนสคริปต์ + ทดสอบสคริปต์ -->
+        <section class="studio-panel">
+          <div class="studio-title">
+            <span>สร้างและทดสอบสคริปต์</span>
+            <span id="testStateBadge" class="badge">พร้อมทดสอบ</span>
+          </div>
+
+          <div class="studio-row">
+            <label style="font-size:12px; color:#9fb0c2;">Port เป้าหมาย:</label>
+            <select id="studioPortSelect" style="flex:1; min-width:175px;"></select>
+            <input id="scriptNameInput" type="text" placeholder="ชื่อสคริปต์" style="width:140px;" />
+            <button id="btnSaveScript" class="btn-add">เซฟ</button>
+            <button id="btnDeleteScript" class="btn-del">ลบ</button>
+          </div>
+
+          <div class="snippet-bar">
+            <span style="font-size:11.5px; color:#9fb0c2;">โค้ดลัด:</span>
+            <button class="btn-chip" data-snippet="ping">+ ping</button>
+            <button class="btn-chip" data-snippet="wait 1">+ wait 1s</button>
+            <button class="btn-chip" data-snippet="click 100 100">+ click x y</button>
+            <button class="btn-chip" data-snippet="find_img target.png">+ find_img</button>
+            <button class="btn-chip" data-snippet='send {"cmd":"ping"}'>+ send</button>
+            <button class="btn-chip" data-snippet="log ข้อความทดสอบ">+ log</button>
+          </div>
+
+          <div class="editor-wrap">
+            <div id="editorLineGutter" class="line-gutter">1</div>
+            <textarea id="studioEditor" spellcheck="false" placeholder="# พิมพ์คำสั่งทีละบรรทัด เช่น&#10;ping&#10;click 250 400&#10;find_img mob.png&#10;wait 1"></textarea>
+          </div>
+
+          <div class="studio-row" style="justify-content:space-between;">
+            <div class="studio-row">
+              <button id="btnTestAll" class="btn-start">ทดสอบสคริปต์</button>
+              <button id="btnTestStep" class="btn-check">ทดสอบทีละบรรทัด</button>
+              <button id="btnTestStop" class="btn-stop" disabled>หยุดทดสอบ</button>
+            </div>
+            <button id="btnClearEditorLineMark" class="btn-chip">ล้างไฮไลต์บรรทัด</button>
+          </div>
+        </section>
+
+        <!-- โซนขวา: ดึงภาพนิ่ง / ขยายดู / Crop ขนาดต้นฉบับ / หาพิกัด X,Y -->
+        <section class="studio-panel">
+          <div class="studio-title">
+            <span>ถ่ายภาพนิ่ง / Crop ต้นฉบับ / หาพิกัด X,Y</span>
+            <span id="toolModePill" class="mode-pill">โหมด: หาพิกัด X,Y</span>
+          </div>
+
+          <div class="studio-row">
+            <button id="btnGrabScreen" class="btn-check">ดึงภาพหน้าจอปัจจุบัน</button>
+            <label class="btn-chip" style="display:inline-flex; align-items:center; cursor:pointer; margin:0;">
+              โหลดไฟล์ภาพ
+              <input id="fileImageInput" type="file" accept="image/*" style="display:none;" />
+            </label>
+            <button id="btnSwitchToCoord" class="btn-chip">หาพิกัด X,Y</button>
+            <button id="btnSwitchToCrop" class="btn-chip">Crop เซฟ .png</button>
+          </div>
+
+          <div class="studio-row">
+            <label style="font-size:12px; color:#9fb0c2;">ซูมดู:</label>
+            <select id="zoomSelect" style="width:95px; height:28px;">
+              <option value="0.5">0.5x</option>
+              <option value="1" selected>1.0x</option>
+              <option value="1.5">1.5x</option>
+              <option value="2">2.0x</option>
+              <option value="3">3.0x</option>
+            </select>
+            <span id="origDimText" style="font-size:11.5px; color:#8b9bb0;">ต้นฉบับ: ยังไม่มีภาพ</span>
+          </div>
+
+          <div class="canvas-viewport">
+            <canvas id="studioStageCanvas" width="460" height="250"></canvas>
+          </div>
+
+          <!-- แถบผลลัพธ์โหมดหาพิกัด X, Y -->
+          <div id="coordPanel" class="studio-row" style="justify-content:space-between;">
+            <span id="coordReadout" style="font-family:Consolas,monospace; font-size:12px; color:#7ee787;">พิกัดต้นฉบับ: X = -, Y = -</span>
+            <div class="studio-row">
+              <button id="btnInsertCoordMove" class="btn-chip">ส่งพิกัดไปสคริปต์</button>
+              <button id="btnInsertCoordClick" class="btn-start" style="height:26px; font-size:11.5px;">ส่งคำสั่ง click</button>
+            </div>
+          </div>
+
+          <!-- แถบผลลัพธ์โหมด Crop ขนาดต้นฉบับเซฟเป็น .png -->
+          <div id="cropPanel" class="studio-row" style="display:none; justify-content:space-between;">
+            <span id="cropReadout" style="font-family:Consolas,monospace; font-size:11.5px; color:#9ecbff;">ลากกรอบ Crop (0x0 px)</span>
+            <div class="studio-row">
+              <input id="cropFilenameInput" type="text" placeholder="ชื่อไฟล์.png" style="width:120px; height:26px; font-size:11.5px;" />
+              <button id="btnSaveCropPng" class="btn-add" style="height:26px; font-size:11.5px;">เซฟ .png</button>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
+
     <div id="page-3" class="page-view" style="display:none;">
       <div class="placeholder-box">แท็บที่ 3 — พื้นที่สำหรับต่อยอดระบบที่ 3 ในอนาคต</div>
     </div>
@@ -86,5 +208,6 @@
 
   <script src="/js/core.js"></script>
   <script src="/js/tab1-ports.js"></script>
+  <script src="/js/tab2-script-studio.js"></script>
 </body>
 </html>

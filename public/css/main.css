@@ -83,7 +83,7 @@ body {
   align-items: center;
 }
 
-input[type="text"], input[type="number"], select, button {
+input[type="text"], input[type="number"], select, button, textarea {
   height: 32px;
   padding: 0 10px;
   border-radius: 6px;
@@ -91,6 +91,13 @@ input[type="text"], input[type="number"], select, button {
   background: #0f1318;
   color: #e6edf3;
   font-size: 12.5px;
+}
+textarea {
+  height: auto;
+  padding: 10px;
+  font-family: Consolas, monospace;
+  line-height: 1.5;
+  resize: vertical;
 }
 button { cursor: pointer; font-weight: bold; }
 button:hover:not(:disabled) { filter: brightness(1.12); }
@@ -169,3 +176,181 @@ tr.row-paused { background: rgba(29, 78, 216, 0.08); }
 .log-success { color: #7ee787; }
 .log-warn { color: #f2cc60; }
 .log-error { color: #ff7b72; }
+
+/* ==================== TAB 2: SCRIPT STUDIO ==================== */
+.studio-grid {
+  display: grid;
+  grid-template-columns: 260px minmax(340px, 1.15fr) minmax(340px, 1.1fr);
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 1180px) {
+  .studio-grid { grid-template-columns: 1fr; }
+}
+
+.studio-panel {
+  background: #1a2028;
+  border: 1px solid #2e3846;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.studio-title {
+  font-size: 13px;
+  font-weight: bold;
+  color: #dbeafe;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #283240;
+  padding-bottom: 6px;
+}
+.script-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 210px;
+  overflow-y: auto;
+}
+.script-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #12171d;
+  border: 1px solid #2a3442;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.script-item.active {
+  background: #1e2d3f;
+  border-color: #4ea1ff;
+  color: #ffffff;
+}
+.script-item-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.snippet-bar, .studio-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.btn-chip {
+  height: 26px;
+  padding: 0 8px;
+  font-size: 11.5px;
+  background: #222c38;
+  border-color: #3a485a;
+}
+
+.editor-wrap {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  background: #0b0e12;
+  border: 1px solid #323e4e;
+  border-radius: 6px;
+  overflow: hidden;
+  min-height: 290px;
+}
+.line-gutter {
+  background: #12171e;
+  color: #6e7f94;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 10px 4px;
+  text-align: right;
+  user-select: none;
+  border-right: 1px solid #252f3d;
+}
+.line-num.is-active {
+  color: #7ee787;
+  font-weight: bold;
+  background: rgba(27, 110, 67, 0.25);
+}
+#studioEditor {
+  width: 100%;
+  min-height: 290px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  outline: none;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-top: 2px;
+}
+.gallery-card {
+  background: #11161c;
+  border: 1px solid #2b3544;
+  border-radius: 6px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.gallery-card img {
+  width: 100%;
+  height: 62px;
+  object-fit: contain;
+  background: #090c10;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.gallery-name {
+  font-size: 11px;
+  color: #c9d6e4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.gallery-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+.gallery-actions button {
+  height: 22px;
+  padding: 0 5px;
+  font-size: 10.5px;
+  flex: 1;
+}
+
+.canvas-viewport {
+  position: relative;
+  width: 100%;
+  height: 270px;
+  overflow: auto;
+  background: #090c10;
+  border: 1px solid #2e3948;
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+#studioStageCanvas {
+  display: block;
+  cursor: crosshair;
+}
+.mode-pill {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #233042;
+  color: #9ecbff;
+}

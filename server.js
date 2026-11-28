@@ -9,6 +9,7 @@ const {
   readJsonSafe
 } = require('./src/utils/storage');
 const { createPortsRouter } = require('./src/routes/ports.routes');
+const { createScriptStudioRouter } = require('./src/routes/scriptStudio.routes');
 
 const PORT = 3000;
 ensureStorageFiles();
@@ -17,7 +18,7 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
-app.use(express.json());
+app.use(express.json({ limit: '25mb' }));
 app.use(express.static(PUBLIC_DIR));
 
 function broadcast(payload) {
@@ -51,6 +52,11 @@ const runner = createScriptRunner({
 app.use('/api', createPortsRouter({
   runner,
   onTargetsChange: (targets) => broadcast({ type: 'targets', targets })
+}));
+
+// โมดูล Tab 2: Script Studio (สคริปต์, ทดสอบ, ถ่ายรูป/Crop ขนาดต้นฉบับ, คลังรูป, พิกัด X,Y)
+app.use('/api/script-studio', createScriptStudioRouter({
+  onLog: pushLog
 }));
 
 wss.on('connection', (ws) => {
